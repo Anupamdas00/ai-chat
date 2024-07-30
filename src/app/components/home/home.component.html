@@ -11,19 +11,39 @@
             Gemini Flash
           </h2>
         </div>
-        <div class="w-11/12 mx-auto flex-grow">
-            <div class="w-4/5 text-start flex gap-x-4 items-center">
-                <img src="https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=mail@ashallendesign.co.uk" class="size-10 rounded-full"/>
-                <p class="bg-gradient-to-t from-gray-900 to-slate-400 text-transparent bg-clip-text text-2xl font-semibold">chat content</p>
-
-            </div>
+        <div class="w-11/12 mx-auto h-[475px] overflow-auto">
+          <div
+            class="w-full text-start flex gap-x-4 items-center"
+            [ngClass]="{ 'flex-row-reverse text-end': chat.role == 'user' }"
+            *ngFor="let chat of chatHistory"
+          >
+            <img
+              [src]="
+                chat.role === 'bot'
+                  ? '../../../assets/ai.avif'
+                  : 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=mail@ashallendesign.co.uk'
+              "
+              class="size-8 rounded-full self-start"
+            />
+            <p
+              class="text-slate-800 text-transparent bg-clip-text text-sm font-semibold"
+            >
+              {{ chat.text }}
+            </p>
+          </div>
+          <div *ngIf="loading" class="w-full">
+            <p class="text-start h-4 my-4 w-1/4 bg-slate-400 rounded-full animate-pulse"></p>
+            <p class="text-start h-4 my-4 w-2/4 bg-slate-400 rounded-full animate-pulse"></p>
+            <p class="text-start h-4 my-4 w-3/4 bg-slate-400 rounded-full animate-pulse"></p>
+            <p class="text-start h-4 my-4 w-full bg-slate-400 rounded-full animate-pulse"></p>
+          </div>
         </div>
-        <div class="w-11/12 mx-auto">
+        <div class="w-11/12 mx-auto block h-fit py-2">
           <input
             type="text"
             class="w-full py-8 px-5 rounded-lg ring ring-pink-500 ring-offset-4 focus:outline-8 outline-indigo-500 font-semibold"
             [(ngModel)]="query"
-            (keyup.enter)="getQueries()"
+            (keyup.enter)="sendPromt(query)"
             autofocus
           />
         </div>

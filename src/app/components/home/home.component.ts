@@ -10,17 +10,16 @@ export class HomeComponent implements OnInit {
   query!: string;
   constructor(private apiService: ApiService) {}
   chatHistory : any[] = []
+  loading! : boolean;
 
-  ngOnInit(): void {}
-
-  getQueries() {
-    if (this.query.length > 0) {
-      this.apiService.getResponse(this.query.trim()).then((res) => {
-        res.subscribe({
-          next: (value) => console.log(value),
-          error: (err) => console.log(err),
-        });
-      });
-    }
+  ngOnInit(): void {
+    this.apiService.getQueries().subscribe((res: any) => this.chatHistory.push(res))
+    this.apiService.loaderObs.subscribe(res => this.loading = res)
   }
+
+  sendPromt(text : string){
+    this.apiService.generateText(text.trim());
+    this.query = ""
+  }
+
 }
